@@ -11,19 +11,19 @@ const Nav = () => {
     },
     {
       name: "About",
-      path: "/",
+      path: "",
     },
     {
       name: "Socials",
-      path: "/",
+      path: "",
     },
     {
       name: "FAQ",
-      path: "/",
+      path: "",
     },
     {
       name: "Support",
-      path: "/",
+      path: "",
     },
   ];
   const pathName = usePathname();
@@ -36,8 +36,8 @@ const Nav = () => {
             key={index}
             className={`${
               link.path === pathName &&
-              "text-yellow-600 border-b-2 border-yellow-600"
-            } capitalize  hover:text-yellow-600 transition-all font-semibold text-lg`}
+              "text-green-600 border-b-2 border-green-600"
+            } capitalize  hover:text-green-600 transition-all font-semibold text-lg`}
           >
             {" "}
             {link.name}{" "}

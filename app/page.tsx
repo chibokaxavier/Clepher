@@ -5,25 +5,25 @@ import { useEffect, useState } from "react";
 
 interface Metadata {
   "1. Information": string;
-  "2. symbol": String;
-  "3. last refreshed": String;
-  "4. interval": String;
-  "5 output size": String;
-  "6 time zone": String;
+  "2. Symbol": string;
+  "3. Last Refreshed": String;
+  "4. Interval": String;
+  "5. Output Size": String;
+  "6. Time Zone": String;
 }
 interface Timeseries {
   [key: string]: {
-    open: String;
-    high: String;
-    low: String;
-    close: string;
-    volume: string;
+    "1. open": String;
+    "2. high": String;
+    "3. low": String;
+    "4. close": string;
+    "5. volume": string;
   };
 }
 
 export default function Home() {
   const [metaData, setMetaData] = useState<Metadata | null>(null);
-  const [timeSeries, setTimeseries] = useState<Timeseries | null>(null);
+  const [timeSeries, setTimeSeries] = useState<Timeseries | null>(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   useEffect(() => {
@@ -31,11 +31,11 @@ export default function Home() {
       setLoading(true);
       try {
         const res = await axios.get(
-          "https://dummyjson.com/c/163c-452c-40f9-9679"
+          "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=IBM&interval=5min&apikey=PROCESS.env.API_KEY"
         );
         console.log(res.data);
         setMetaData(res.data["Meta Data"]);
-        setTimeseries(res.data["Time Series (5Min)"]);
+        setTimeSeries(res.data["Time Series (5min)"]);
       } catch (error) {
         console.log("Error fetching data:", error);
         setError("Failed to fetch data");
@@ -48,7 +48,8 @@ export default function Home() {
 
   useEffect(() => {
     console.log(metaData);
-  }, [metaData]);
+    console.log(timeSeries);
+  }, [metaData, timeSeries]);
 
   if (loading) {
     return <Spinner />;
@@ -57,13 +58,57 @@ export default function Home() {
     return <div>{error}</div>;
   }
   return (
-    <main className="p-10">
-      <div>
-        <h1>Meta Data for Clepher {metaData?.["2. symbol"]}</h1>
+    <main className="xl:px-20 px-5  pt-10">
+      <div className="bg-green-300  h-fit w-fit p-4 rounded-md">
+        <div>
+          <h1 className="text-3xl font-bold pb-10">
+            Meta Data for Clepher {metaData?.["2. Symbol"]}
+          </h1>
+        </div>
+        <div className="flex gap-1">
+          <p className="text-lg font-semibold">Information: </p>
+          <span> {metaData?.["1. Information"]}</span>
+        </div>
+        <div className="flex gap-1 pt-1">
+          <p className="text-lg font-semibold">Symbol: </p>
+          <span> {metaData?.["2. Symbol"]}</span>
+        </div>
+        <div className="flex gap-1 pt-1">
+          <p className="text-lg font-semibold">Last Refreshed: </p>
+          <span> {metaData?.["3. Last Refreshed"]}</span>
+        </div>
+        <div className="flex gap-1 pt-1">
+          <p className="text-lg font-semibold">Interval: </p>
+          <span> {metaData?.["4. Interval"]}</span>
+        </div>
+        <div className="flex gap-1 pt-1">
+          <p className="text-lg font-semibold">Output Size: </p>
+          <span> {metaData?.["5. Output Size"]}</span>
+        </div>
+        <div className="flex gap-1 pt-1">
+          <p className="text-lg font-semibold">Time Zone: </p>
+          <span> {metaData?.["6. Time Zone"]}</span>
+        </div>
       </div>
-      <div className="flex">
-        <p>Information:</p>
-        <span>{metaData?.["1. Information"]}</span>
+      <div>
+        <h2 className="text-2xl font-semibold mt-10">Time Series (5min)</h2>
+        {timeSeries ? (
+          Object.entries(timeSeries).map(([time, value]) => (
+            <div
+              key={time}
+              className="mt-4 p-4 bg-green-300 border rounded w-fit min-w-[370px]"
+            >
+              <p className="font-bold">Timestamp: {time}</p>
+              <p>Open: {value["1. open"]}</p>
+              <p>High: {value["2. high"]}</p>
+              <p>Low: {value["3. low"]}</p>
+              <p>Close: {value["4. close"]}</p>
+              <p>Volume: {value["5. volume"]}</p>
+            </div>
+          ))
+        ) : (
+          <p>No time series data available</p>
+        )}
       </div>
     </main>
   );

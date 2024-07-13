@@ -2,11 +2,12 @@
 import Link from "next/link";
 import React from "react";
 import Nav from "@/components/Nav";
+import { CiFries, CiMenuFries } from "react-icons/ci";
 
 const Header = () => {
   return (
-    <header className="py-8 xl:py-8 sticky top-0 z-30 bg-white ">
-      <div className="container mx-auto flex justify-between items-center">
+    <header className="py-8 xl:py-8 sticky top-0 z-30 bg-white px-5 xl:px-20">
+      <div className="  flex justify-between items-center">
         <Link href={"/"}>
           <h1 className="text-4xl font-semibold text-green-600">
             Clepher<span className="text-accent">.</span>
@@ -16,7 +17,7 @@ const Header = () => {
           <Nav />
         </div>
         <div className="xl:hidden">
-          {/* <MobileNav /> */}
+          <CiMenuFries className="text-3xl" />
         </div>
       </div>
     </header>
